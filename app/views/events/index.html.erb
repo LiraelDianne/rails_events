@@ -1,0 +1,74 @@
+<div class="nav">
+	<h2>Welcome, <%=@user.first_name%>!</h2>
+	<a href="/users/<%=@user.id%>">Edit My Profile</a>
+	<a href="/logout">Logout</a>
+</div>
+<h3>Here are some of the events in your state:</h3>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Date</th>
+		<th>Location</th>
+		<th>Host</th>
+		<th>Action/Status</th>
+	</tr>
+	<% @inStateEvents.each do |e| %>
+		<tr>
+			<td><a href="/events/<%=e.id%>"><%= e.name %></a></td>
+			<td><%= e.date %></td>
+			<td><%= e.location %></td>
+			<td><%= e.user.first_name %></td>
+			<td>
+				<% if @user == e.user %>
+					<a href="/event/<%=e.id%>/edit">Edit</a>
+					<a href="/event/<%=e.id%>" data-method='delete'>Destroy</a>
+				<% end %>
+				<% elsif e.attendees.include?(@user) %>
+					<p>Joining <a href="/events/<%=e.id%>/leave">Cancel</a></p>
+				<% else %>
+					<a href="/events/<%=e.id%>/join">Join</a>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+<h3>Here are some of the events in other states:</h3>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Date</th>
+		<th>Location</th>
+		<th>State</th>
+		<th>Host</th>
+		<th>Action/Status</th>
+	</tr>
+	<% @otherEvents.each do |e| %>
+		<tr>
+			<td><a href="/events/<%=e.id%>"><%= e.name %></a></td>
+			<td><%= e.date %></td>
+			<td><%= e.location %></td>
+			<th><%= e.state %></th>
+			<td><%= e.user.first_name %></td>
+			<td>
+				<% if @user == e.user %>
+					<a href="/event/<%=e.id%>/edit">Edit</a>
+					<a href="/event/<%=e.id%>" data-method='delete'>Destroy</a>
+				<% end %>
+				<% elsif e.attendees.include?(@user) %>
+					<p>Joining <a href="/events/<%=e.id%>/leave">Cancel</a></p>
+				<% else %>
+					<a href="/events/<%=e.id%>/join">Join</a>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+<%= simple_form_for @event do |e| %>
+	<%= f.input :name %>
+	<%= f.input :date %>
+	<%= f.input :location %>
+	<%= f.input :state do %>
+	  	<%= f.subregion_select :state, {object: f.object, prompt: 'State'} %>
+	<% end %>
+	<%= f.submit "Add Event" %>
+<% end %>

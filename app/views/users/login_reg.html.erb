@@ -1,0 +1,27 @@
+<div class="inline">
+	<h2>Register</h2>
+	<%= simple_form_for @user do |f| %>
+	  <%= f.input :first_name %>
+	  <%= f.input :last_name %>
+	  <%= f.input :email %>
+	  <%= f.input :location %>
+	  <%= f.input :state do %>
+	  	<%= f.subregion_select :state, {object: f.object, prompt: 'State'} %>
+	  <% end %>
+	  <%= f.input :password %>
+	  <p>Password should be at least 8 characters</p>
+	  <%= f.input :password_confirmation %>
+	  <%= f.submit "Register" %>
+	<% end %>
+</div>
+<div class="inline">
+	<h2>Login</h2>
+	<% if flash[:login_error] %>
+		<p><%= flash[:login_error] %></p>
+	<% end %>
+	<%= form_for :user, url: {action: 'login'}, method: :post, do |f| %>
+		<%= f.text_field :email %>
+  		<%= f.password :password %>
+  		<%= f.submit("Login") %>
+  	<% end %>
+</div>

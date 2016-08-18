@@ -1,0 +1,39 @@
+<div class="nav">
+	<h2><%=@event.name%></h2>
+	<a href="/events">Events Dashboard</a>
+	<a href="/logout">Logout</a>
+</div>
+<div class="inline">
+	<h4>Host: <%= @event.user.first_name %> <%= @event.user.last_name %></h4>
+	<h4>Date: <%= @event.date %></h4>
+	<h4>Location: <%= @event.location %>, <%= @event.state %></h4>
+	<h4>People who are joining the event: <%= event.attendees.length %></h4>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Location</th>
+			<th>State</th>
+		</tr>
+		<% @event.attendees.each do |u| %>
+			<tr>
+				<td><%= u.first_name %><%= u.last_name %></td>
+				<td><%= u.location %></td>
+				<td><%= u.state %></td>
+			</tr>
+		<% end %>
+	</table>
+</div>
+<div class="inline">
+	<h3>Discussion about this event:</h3>
+	<div class="comments">
+		<% @event.comments.each do |c| %>
+			<p><%= c.user.first_name %> says: <span class="italic"><%= c.content %></span></p>
+			<p>..............</p>
+		<% end %>
+	</div>
+	<h4>Add Comment:</h4>
+	<%= simple_form_for @comment do |f| %>
+		<%= f.input :content %>
+		<%= f.submit "Submit Comment" %>
+	<% end %>
+</div>
